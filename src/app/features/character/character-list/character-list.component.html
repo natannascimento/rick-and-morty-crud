@@ -1,0 +1,71 @@
+<mat-card class="page">
+  <div class="header">
+    <h1>Personagens</h1>
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="new()">
+        <mat-icon>add</mat-icon> Novo
+      </button>
+    </div>
+  </div>
+
+  <mat-form-field appearance="outline" class="search">
+    <mat-label>Buscar por nome</mat-label>
+    <input matInput (input)="search($event)" placeholder="ex.: Rick">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-progress-bar *ngIf="vm.loading()" mode="indeterminate"></mat-progress-bar>
+
+  <table mat-table [dataSource]="filtered()" class="mat-elevation-z2">
+    <ng-container matColumnDef="thumb">
+      <th mat-header-cell *matHeaderCellDef> Imagem </th>
+      <td mat-cell *matCellDef="let p">
+        <img [src]="p.image" width="48" height="48" alt="thumb" class="thumb">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nome </th>
+      <td mat-cell *matCellDef="let p">
+        <span [innerHTML]="(p.name)"></span>
+        <span *ngIf="p._local" class="badge">local</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="species">
+      <th mat-header-cell *matHeaderCellDef> Espécie </th>
+      <td mat-cell *matCellDef="let p">{{ p.species }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let p">{{ p.status }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Ações </th>
+      <td mat-cell *matCellDef="let p">
+        <button mat-icon-button (click)="view(p.id)" aria-label="view">
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button mat-icon-button (click)="edit(p.id)" aria-label="edit">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="delete(p.id)" aria-label="delete">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator
+    [length]="vm.total()"
+    [pageIndex]="vm.page() - 1"
+    [pageSize]="20"
+    [pageSizeOptions]="[10,20,50]"
+    (page)="onPage($event)">
+  </mat-paginator>
+</mat-card>
