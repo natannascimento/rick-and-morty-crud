@@ -54,20 +54,6 @@ npm start
 
 Abra seu navegador e acesse `http://localhost:4200/`. A aplicação será recarregada automaticamente quando você modificar os arquivos fonte.
 
-## 🏗️ Build para Produção
-
-Para criar uma versão otimizada para produção:
-
-```bash
-ng build
-```
-
-Os arquivos serão gerados na pasta `dist/`. Para build de produção otimizado:
-
-```bash
-ng build --configuration production
-```
-
 ## 🧪 Testes
 
 ### Testes Unitários
@@ -123,15 +109,6 @@ O projeto consome a [Rick & Morty API](https://rickandmortyapi.com/) para obter 
 ## 💾 Persistência Local
 
 Personagens criados localmente são armazenados no localStorage do navegador, permitindo que sejam editados e deletados.
-
-## 🚀 Deploy
-
-Para fazer deploy da aplicação, após o build, você pode hospedar os arquivos da pasta `dist/` em qualquer servidor web estático como:
-
-- GitHub Pages
-- Netlify
-- Vercel
-- Firebase Hosting
 
 ## 📄 Licença
 
