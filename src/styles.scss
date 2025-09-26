@@ -1,6 +1,74 @@
 /* You can add global styles to this file, and also import other style files */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif; background: #fafafa; }
-a { text-decoration: none; color: inherit; }
+// 🎨 Rick & Morty Paleta Suave
+:root {
+  // Cores Principais
+  --primary-color: #4CAF50;      // Verde Portal Suave
+  --primary-light: #81C784;
+  --accent-color: #2196F3;       // Azul Científico
+  --accent-light: #64B5F6;
+  
+  // Cores de Fundo
+  --bg-primary: #F8FBF8;         // Verde muito claro
+  --bg-secondary: #FFFFFF;
+  --bg-card: #FFFFFF;
+  
+  // Cores de Texto
+  --text-primary: #263238;       // Cinza escuro suave
+  --text-secondary: #546E7A;     // Cinza médio
+  --text-light: #78909C;
+  
+  // Cores de Estado
+  --success-color: #4CAF50;
+  --warning-color: #FF9800;
+  --error-color: #F44336;
+  
+  // Cores de Borda
+  --border-light: #E8F5E8;       // Verde claro para bordas
+  --border-medium: #C8E6C9;
+  --shadow-color: rgba(76, 175, 80, 0.1);
+}
+
+html, body { 
+  height: 100%; 
+}
+
+body { 
+  margin: 0; 
+  font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif; 
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+a { 
+  text-decoration: none; 
+  color: inherit; 
+}
+
+// Customização do Material Design
+.mat-toolbar.mat-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  color: white;
+}
+
+.mat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.mat-raised-button.mat-primary {
+  background: var(--primary-color);
+  &:hover {
+    background: var(--primary-light);
+  }
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: var(--primary-color);
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: var(--primary-color);
+}

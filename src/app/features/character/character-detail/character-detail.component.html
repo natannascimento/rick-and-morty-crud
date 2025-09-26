@@ -1,15 +1,22 @@
-<mat-card *ngIf="character() as char" class="character-detail">
-  <mat-card-header>
-    <div mat-card-avatar>
-      <img
-        [src]="char.image"
-        [alt]="char.name"
-        style="width: 48px; height: 48px; border-radius: 50%"
-      />
-    </div>
-    <mat-card-title>{{ char.name }}</mat-card-title>
-    <mat-card-subtitle>{{ char.species }} | {{ char.status }}</mat-card-subtitle>
-  </mat-card-header>
+<div class="detail-container">
+  <div class="header-with-back">
+    <button mat-icon-button class="back-button" (click)="goBack()" title="Voltar para lista">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+  
+  <mat-card *ngIf="character() as char" class="character-detail">
+    <mat-card-header>
+      <div mat-card-avatar>
+        <img
+          [src]="char.image"
+          [alt]="char.name"
+          style="width: 48px; height: 48px; border-radius: 50%"
+        />
+      </div>
+      <mat-card-title>{{ char.name }}</mat-card-title>
+      <mat-card-subtitle>{{ char.species }} | {{ char.status }}</mat-card-subtitle>
+    </mat-card-header>
   <img mat-card-image [src]="char.image" [alt]="char.name" />
   <mat-card-content>
     <div class="info-grid">
@@ -21,3 +28,4 @@
     </div>
   </mat-card-content>
 </mat-card>
+</div>

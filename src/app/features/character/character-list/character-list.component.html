@@ -1,18 +1,19 @@
 <mat-card class="page">
   <div class="header">
-  <h1>Characters</h1>
-    <div class="actions">
-      <button mat-raised-button color="primary" (click)="new()">
-        <mat-icon>add</mat-icon> New
-      </button>
-    </div>
+    <h1>Rick & Morty Characters</h1>
   </div>
 
-  <mat-form-field appearance="outline" class="search">
-  <mat-label>Search by name</mat-label>
-  <input matInput (input)="search($event)" placeholder="e.g.: Rick">
-    <mat-icon matSuffix>search</mat-icon>
-  </mat-form-field>
+  <div class="search-section">
+    <mat-form-field appearance="outline" class="search">
+      <mat-label>Search by name</mat-label>
+      <input matInput (input)="search($event)" placeholder="e.g.: Rick">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    
+    <button mat-raised-button color="primary" (click)="new()" class="new-button">
+      <mat-icon>add</mat-icon> New Character
+    </button>
+  </div>
 
   <mat-progress-bar *ngIf="vm.loading()" mode="indeterminate"></mat-progress-bar>
 

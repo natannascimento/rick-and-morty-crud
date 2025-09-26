@@ -1,6 +1,130 @@
-.page { padding: 16px; }
-.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.search { width: 320px; margin-bottom: 8px; }
-.thumb { border-radius: 8px; object-fit: cover; }
-.badge { margin-left: 8px; font-size: 10px; padding: 2px 6px; background: #e0f2f1; border-radius: 999px; }
-table { width: 100%; }
+.page { 
+  padding: 24px;.search-section {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+  margin-bottom: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+}d: var(--bg-primary);
+  min-height: 100vh;
+}
+
+.header { 
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  margin-bottom: 32px;
+  text-align: center;
+  
+  h1 {
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 700;
+    font-size: 3rem;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.search-section {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+.search { 
+  flex: 1;
+  max-width: 400px;
+  min-width: 300px;
+  
+  .mat-form-field {
+    width: 100%;
+  }
+}
+
+.new-button {
+  height: 56px; 
+  padding: 50 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-bottom: 21px;
+  
+  mat-icon {
+    margin-right: 8px;
+  }
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+  }
+}
+
+.thumb { 
+  border-radius: 8px; 
+  object-fit: cover;
+  border: 2px solid var(--border-light);
+  transition: border-color 0.3s ease;
+  
+  &:hover {
+    border-color: var(--primary-light);
+  }
+}
+
+.badge { 
+  margin-left: 8px; 
+  font-size: 10px; 
+  padding: 4px 8px; 
+  background: var(--border-light); 
+  color: var(--primary-color);
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+table { 
+  width: 100%;
+  background: var(--bg-card);
+  
+  .mat-header-cell {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  
+  .mat-cell {
+    color: var(--text-secondary);
+  }
+}
+
+// Botão de ações com cores suaves
+.mat-icon-button {
+  &:hover {
+    background: var(--border-light);
+    color: var(--primary-color);
+  }
+}
+
+// Progress bar personalizada
+.mat-progress-bar {
+  .mat-progress-bar-fill::after {
+    background-color: var(--primary-color);
+  }
+}
