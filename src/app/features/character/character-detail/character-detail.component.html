@@ -1,0 +1,40 @@
+<mat-card *ngIf="character() as char" class="character-detail">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <img
+        [src]="char.image"
+        [alt]="char.name"
+        style="width: 48px; height: 48px; border-radius: 50%"
+      />
+    </div>
+    <mat-card-title>{{ char.name }}</mat-card-title>
+    <mat-card-subtitle
+      >{{ char.species }} | {{ char.status }}</mat-card-subtitle
+    >
+  </mat-card-header>
+  <img mat-card-image [src]="char.image" [alt]="char.name" />
+  <mat-card-content>
+    <div class="info-grid">
+      <div>
+        <p>Status: {{ char.status }}</p>
+        <p>Espécie: {{ char.species }}</p>
+        <p>Tipo: {{ char.type || "-" }}</p>
+        <p>Gênero: {{ char.gender }}</p>
+      </div>
+      <div>
+        <p>
+          Origem:
+          <a [href]="char.origin.url" target="_blank">{{ char.origin.name }}</a>
+        </p>
+        <p>
+          Localização:
+          <a [href]="char.location.url" target="_blank">{{
+            char.location.name
+          }}</a>
+        </p>
+        <p>Criado em: {{ char.created | date : "dd/MM/yyyy HH:mm" }}</p>
+        <p>Episódios: {{ char.episode?.length || 0 }}</p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

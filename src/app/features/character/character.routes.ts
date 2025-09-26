@@ -11,11 +11,11 @@ export const CHARACTERS_ROUTES: Routes = [
 //     loadComponent: () =>
 //       import('./form/character-form.component').then(m => m.CharacterFormComponent)
 //   },
-//   {
-//     path: ':id',
-//     loadComponent: () =>
-//       import('./detail/character-detail.component').then(m => m.CharacterDetailComponent)
-//   },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./character-detail/character-detail.component').then(m => m.CharacterDetailComponent)
+  },
 //   {
 //     path: ':id/edit',
 //     loadComponent: () =>

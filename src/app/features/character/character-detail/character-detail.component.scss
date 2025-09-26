@@ -1,0 +1,27 @@
+.character-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 400px;
+  margin: 2rem auto;
+  color: #222;
+  border: 1px solid #eee;
+}
+.character-detail img {
+  width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  border: none;
+}
+.mat-card-title, .mat-card-subtitle {
+  color: #222;
+}
+.mat-card-content p {
+  color: #444;
+  font-size: 1.1rem;
+}

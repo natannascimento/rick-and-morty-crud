@@ -39,6 +39,10 @@ export class CharacterListComponent implements OnInit {
     await this.vm.load(page, this.vm.query());
   }
 
+  viewDetail(id: number) {
+    this.router.navigate(['/character', id]);
+  }
+
   async search(ev: Event) {
     const value = (ev.target as HTMLInputElement).value.trim();
     await this.vm.load(1, value);
