@@ -187,19 +187,19 @@ describe('CharacterDetailComponent', () => {
       await createComponent();
       component.goBack();
 
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['../']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
     });
 
     it('deve navegar de volta independente do estado do personagem', async () => {
       await createComponent();
       component.goBack();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['../']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
 
       mockRouter.navigate.mockClear();
 
       await createComponent('1');
       component.goBack();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['../']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
     });
   });
 

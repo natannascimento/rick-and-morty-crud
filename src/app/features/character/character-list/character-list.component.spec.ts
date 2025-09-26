@@ -282,7 +282,7 @@ describe('CharacterListComponent', () => {
       const compiled = fixture.nativeElement as HTMLElement;
       const title = compiled.querySelector('h1');
 
-      expect(title?.textContent?.trim()).toBe('Characters');
+      expect(title?.textContent?.trim()).toBe('Rick & Morty Characters');
     });
 
     it('deve renderizar botão "New" com ícone', () => {
