@@ -17,10 +17,10 @@ Antes de executar o projeto, certifique-se de ter instalado em sua máquina:
 
 - **Node.js** (versão 18 ou superior)
 - **npm** (normalmente vem com o Node.js)
-- **Angular CLI** (versão 19 ou superior)
+- **Angular CLI** (versão 19)
 
 ```bash
-npm install -g @angular/cli
+npm install -g @angular/cli@19
 ```
 
 ## 🔧 Instalação
