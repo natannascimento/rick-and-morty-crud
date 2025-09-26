@@ -32,11 +32,11 @@ export class CharacterFormComponent implements OnInit {
   title = computed(() => this.id() ? 'Edit Character' : 'New Character');
 
   form = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    species: ['', Validators.required],
+    name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+    species: ['', [Validators.required, Validators.maxLength(30)]],
     status: ['unknown', Validators.required],
     gender: ['unknown', Validators.required],
-    image: ['', Validators.required],
+    image: ['', [Validators.required, Validators.maxLength(500)]],
   });
 
   async ngOnInit() {

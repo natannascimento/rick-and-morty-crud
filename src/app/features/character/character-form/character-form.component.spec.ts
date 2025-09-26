@@ -236,6 +236,48 @@ describe('CharacterFormComponent', () => {
       expect(component.form.get('status')?.valid).toBe(true);
       expect(component.form.get('gender')?.valid).toBe(true);
     });
+
+    it('deve validar nome com maxLength', () => {
+      const longName = 'a'.repeat(51); // 51 caracteres
+      component.form.patchValue({ name: longName });
+
+      expect(component.form.get('name')?.hasError('maxlength')).toBe(true);
+    });
+
+    it('deve aceitar nome com maxLength válido', () => {
+      const validName = 'a'.repeat(50); // 50 caracteres
+      component.form.patchValue({ name: validName });
+
+      expect(component.form.get('name')?.hasError('maxlength')).toBe(false);
+    });
+
+    it('deve validar species com maxLength', () => {
+      const longSpecies = 'a'.repeat(31); // 31 caracteres
+      component.form.patchValue({ species: longSpecies });
+
+      expect(component.form.get('species')?.hasError('maxlength')).toBe(true);
+    });
+
+    it('deve aceitar species com maxLength válido', () => {
+      const validSpecies = 'a'.repeat(30); // 30 caracteres
+      component.form.patchValue({ species: validSpecies });
+
+      expect(component.form.get('species')?.hasError('maxlength')).toBe(false);
+    });
+
+    it('deve validar image com maxLength', () => {
+      const longImage = 'https://example.com/' + 'a'.repeat(500); // Mais de 500 caracteres
+      component.form.patchValue({ image: longImage });
+
+      expect(component.form.get('image')?.hasError('maxlength')).toBe(true);
+    });
+
+    it('deve aceitar image com maxLength válido', () => {
+      const validImage = 'https://example.com/' + 'a'.repeat(480); // Menos de 500 caracteres
+      component.form.patchValue({ image: validImage });
+
+      expect(component.form.get('image')?.hasError('maxlength')).toBe(false);
+    });
   });
 
   describe('Salvamento de Novo Personagem', () => {
