@@ -67,8 +67,8 @@ export class CharacterFormComponent implements OnInit {
     const payload = this.form.value as Omit<Character, 'id'>;
 
     if (this.id()) {
-      if ((this.state as any).updateLocal) {
-        await (this.state as any).updateLocal(this.id()!, payload);
+      if ((this.state as any).editLocalCharacter) {
+        await (this.state as any).editLocalCharacter(this.id()!, payload);
       }
     } else {
       await this.state.addLocalCharacter(payload);

@@ -72,6 +72,22 @@ export class CharactersService {
     return novo;
   }
 
+  async editLocalCharacter(id: number, patch: Partial<Character>) {
+    const locals = this.readLocal();
+    const idx = locals.findIndex(p => p.id === id);
+    if (idx >= 0) {
+      locals[idx] = { ...locals[idx], ...patch, _updatedAt: new Date().toISOString() };
+      this.writeLocal(locals);
+    } else {
+      const original = await this.getById(id);
+      if (original) {
+        locals.unshift({ ...original, ...patch, _local: true, _updatedAt: new Date().toISOString(), id });
+        this.writeLocal(locals);
+      }
+    }
+    await this.load(this.page(), this.query());
+  }
+
   async deleteLocal(id: number) {
     const locals = this.readLocal().filter(p => p.id !== id);
     this.writeLocal(locals);

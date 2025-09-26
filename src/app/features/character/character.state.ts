@@ -10,7 +10,9 @@ export function useCharactersState() {
     query:       svc.query,
     page:        svc.page,
     load:        svc.load.bind(svc),
+    getById:     svc.getById.bind(svc),
     addLocalCharacter: svc.addLocalCharacter.bind(svc),
+    editLocalCharacter: svc.editLocalCharacter.bind(svc),
     deleteLocal: svc.deleteLocal.bind(svc),
   };
 }
