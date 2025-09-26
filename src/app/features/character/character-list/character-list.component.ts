@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 
 import { CharactersService } from '../../../core/services/character.service';
+import { StatusFormatPipe } from '../../../shared/pipes/status-format.pipe';
 
 @Component({
   standalone: true,
@@ -20,7 +21,7 @@ import { CharactersService } from '../../../core/services/character.service';
   imports: [
     CommonModule,
     MatTableModule, MatPaginatorModule, MatFormFieldModule, MatInputModule,
-    MatIconModule, MatButtonModule, MatProgressBarModule, MatCardModule
+    MatIconModule, MatButtonModule, MatProgressBarModule, MatCardModule, StatusFormatPipe
   ]
 })
 export class CharacterListComponent implements OnInit {

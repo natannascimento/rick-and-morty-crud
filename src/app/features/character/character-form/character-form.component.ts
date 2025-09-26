@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Character } from '../../../core/models/character.model';
 import { CharactersService } from '../../../core/services/character.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   standalone: true,
@@ -16,7 +18,8 @@ import { CharactersService } from '../../../core/services/character.service';
   styleUrls: ['./character-form.component.scss'],
   imports: [
     CommonModule, ReactiveFormsModule,
-    MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule
+    MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule,
+    MatSelectModule, MatOptionModule
   ]
 })
 export class CharacterFormComponent implements OnInit {

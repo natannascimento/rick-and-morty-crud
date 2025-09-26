@@ -1,5 +1,5 @@
 <mat-card>
-  <h2>Novo Personagem</h2>
+  <h2>New Character</h2>
 
   <form [formGroup]="form" (ngSubmit)="save()">
     <div class="preview">
@@ -8,34 +8,45 @@
 
     <div class="form-fields">
       <mat-form-field appearance="outline">
-        <mat-label>Nome</mat-label>
+        <mat-label>Name</mat-label>
         <input matInput formControlName="name" required />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
-        <input matInput formControlName="status" required />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Espécie</mat-label>
+        <mat-label>Species</mat-label>
         <input matInput formControlName="species" required />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Gênero</mat-label>
-        <input matInput formControlName="gender" required />
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status" required>
+          <mat-option value="Alive">Alive</mat-option>
+          <mat-option value="Dead">Dead</mat-option>
+          <mat-option value="Unknown">Unknown</mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Imagem (URL)</mat-label>
+        <mat-label>Gender</mat-label>
+        <mat-select formControlName="gender" required>
+          <mat-option value="Male">Male</mat-option>
+          <mat-option value="Female">Female</mat-option>
+          <mat-option value="Genderless">Genderless</mat-option>
+          <mat-option value="Unknown">Unknown</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Image (URL)</mat-label>
         <input matInput formControlName="image" />
       </mat-form-field>
 
       <div class="actions">
-      <button mat-raised-button color="primary" type="submit">Save</button>
-      <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
-    </div>
+        <button mat-raised-button color="primary" type="submit">Save</button>
+        <button mat-raised-button color="warn" type="button" (click)="cancel()">
+          Cancel
+        </button>
+      </div>
     </div>
   </form>
 </mat-card>
