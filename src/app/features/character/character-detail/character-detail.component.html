@@ -18,22 +18,7 @@
       <div>
         <p>Status: {{ char.status }}</p>
         <p>Espécie: {{ char.species }}</p>
-        <p>Tipo: {{ char.type || "-" }}</p>
         <p>Gênero: {{ char.gender }}</p>
-      </div>
-      <div>
-        <p>
-          Origem:
-          <a [href]="char.origin.url" target="_blank">{{ char.origin.name }}</a>
-        </p>
-        <p>
-          Localização:
-          <a [href]="char.location.url" target="_blank">{{
-            char.location.name
-          }}</a>
-        </p>
-        <p>Criado em: {{ char.created | date : "dd/MM/yyyy HH:mm" }}</p>
-        <p>Episódios: {{ char.episode?.length || 0 }}</p>
       </div>
     </div>
   </mat-card-content>

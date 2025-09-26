@@ -1,0 +1,41 @@
+<mat-card>
+  <h2>Novo Personagem</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="preview">
+      <img [src]="form.value.image || ''" alt="preview" />
+    </div>
+
+    <div class="form-fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="name" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <input matInput formControlName="status" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Espécie</mat-label>
+        <input matInput formControlName="species" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Gênero</mat-label>
+        <input matInput formControlName="gender" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Imagem (URL)</mat-label>
+        <input matInput formControlName="image" />
+      </mat-form-field>
+
+      <div class="actions">
+      <button mat-raised-button color="primary" type="submit">Save</button>
+      <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+    </div>
+    </div>
+  </form>
+</mat-card>

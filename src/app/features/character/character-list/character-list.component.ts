@@ -10,7 +10,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 
-import { CharactersState } from '../../../core/services/character.service';
+import { CharactersService } from '../../../core/services/character.service';
 
 @Component({
   standalone: true,
@@ -25,7 +25,7 @@ import { CharactersState } from '../../../core/services/character.service';
 })
 export class CharacterListComponent implements OnInit {
   private router = inject(Router);
-  vm = inject(CharactersState);
+  vm = inject(CharactersService);
 
   displayedColumns = ['thumb', 'name', 'species', 'status', 'actions'];
   filtered = computed(() => this.vm.characters());

@@ -8,7 +8,7 @@ type ApiResponse = {
 };
 
 @Injectable({ providedIn: 'root' })
-export class CharactersState {
+export class CharactersService {
   private http = inject(HttpClient);
   private baseUrl = 'https://rickandmortyapi.com/api/character';
 
@@ -53,6 +53,23 @@ export class CharactersState {
     } finally {
       this.loading.set(false);
     }
+  }
+
+  getById(id: number) {
+    const local = this.readLocal().find(p => p.id === id);
+    if (local) return Promise.resolve(local);
+
+    return this.http.get<Character>(`${this.baseUrl}/${id}`).toPromise();
+  }
+
+  async addLocalCharacter(data: Omit<Character, 'id'>) {
+    const locals = this.readLocal();
+    const newId = -(locals.length + 1);
+    const novo: Character = { ...data, id: newId, _local: true, _updatedAt: new Date().toISOString() };
+    locals.unshift(novo);
+    this.writeLocal(locals);
+    await this.load(this.page(), this.query());
+    return novo;
   }
 
   async deleteLocal(id: number) {

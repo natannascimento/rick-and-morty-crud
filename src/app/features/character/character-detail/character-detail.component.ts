@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { CharactersState } from '../../../core/services/character.service';
 import { Character } from '../../../core/models/character.model';
+import { CharactersService } from '../../../core/services/character.service';
 
 @Component({
   selector: 'app-character-detail',
@@ -15,7 +15,7 @@ import { Character } from '../../../core/models/character.model';
 })
 export class CharacterDetailComponent {
   private route = inject(ActivatedRoute);
-  private characterService = inject(CharactersState);
+  private characterService = inject(CharactersService);
 
   character = signal<Character | null>(null);
 
