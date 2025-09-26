@@ -17,5 +17,5 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'rick-morty-crud';
+  title = 'rick-and-morty-crud';
 }
