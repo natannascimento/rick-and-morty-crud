@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { CharactersService } from './character.service';
 import { Character } from '../models/character.model';
 
@@ -58,8 +59,11 @@ describe('CharactersService', () => {
     });
 
     TestBed.configureTestingModule({
-      imports: [],
-      providers: [CharactersService],
+      providers: [
+        CharactersService,
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ],
     });
 
     service = TestBed.inject(CharactersService);
@@ -239,7 +243,6 @@ describe('CharactersService', () => {
         image: 'new-image.jpg',
       };
 
-      // Mock do método load
       jest.spyOn(service, 'load').mockResolvedValue();
 
       const result = await service.addLocalCharacter(newCharacterData);
@@ -374,7 +377,15 @@ describe('CharactersService', () => {
       expect(localStorage.getItem).toHaveBeenCalledWith('rm-local-characters');
     });
 
-    it('deve lidar com dados corrompidos no localStorage', async () => {
+    it('deve lidar com dados corrompidos no localStorage durante load', async () => {
+      const originalParse = JSON.parse;
+      JSON.parse = jest.fn().mockImplementation((data) => {
+        if (data === 'json inválido') {
+          throw new SyntaxError('Unexpected token');
+        }
+        return originalParse(data);
+      });
+
       localStorageMock['rm-local-characters'] = 'json inválido';
 
       const loadPromise = service.load(1, '');
@@ -384,22 +395,190 @@ describe('CharactersService', () => {
       );
       req.error(new ErrorEvent('Network error'));
 
-      // Deve falhar quando JSON.parse falha e API também falha
       await expect(loadPromise).rejects.toThrow();
+
+      JSON.parse = originalParse;
     });
 
-    it('deve funcionar com localStorage corrompido mas chamada da API bem-sucedida', async () => {
+    it('deve lidar com JSON.parse falhando no readLocal durante getById', async () => {
+      const originalParse = JSON.parse;
+      JSON.parse = jest.fn().mockImplementation((data) => {
+        if (data === 'json inválido') {
+          throw new SyntaxError('Unexpected token');
+        }
+        return originalParse(data);
+      });
+
       localStorageMock['rm-local-characters'] = 'json inválido';
+
+      try {
+        await service.getById(-999);
+        fail('Deveria ter lançado erro');
+      } catch (error) {
+        expect(error).toBeInstanceOf(SyntaxError);
+        expect((error as Error).message).toBe('Unexpected token');
+      }
+
+      JSON.parse = originalParse;
+    });
+
+    it('deve lidar com resposta vazia da API (results undefined)', async () => {
+      const emptyApiResponse = {
+        info: {
+          count: 0,
+          pages: 1,
+          next: null,
+          prev: null,
+        },
+        results: undefined, 
+      };
 
       const loadPromise = service.load(1, '');
 
       const req = httpMock.expectOne(
         'https://rickandmortyapi.com/api/character?page=1'
       );
+      req.flush(emptyApiResponse);
+
+      await loadPromise;
+
+      expect(service.characters()).toEqual([]);
+      expect(service.total()).toBe(0);
+    });
+
+    it('deve lidar com resposta da API completamente null/undefined', async () => {
+      const loadPromise = service.load(1, '');
+
+      const req = httpMock.expectOne(
+        'https://rickandmortyapi.com/api/character?page=1'
+      );
+      req.flush(null); 
+
+      await loadPromise;
+
+      expect(service.characters()).toEqual([]);
+      expect(service.total()).toBe(0);
+    });
+
+    it('deve testar o método writeLocal diretamente através de addLocalCharacter', async () => {
+      const newCharacterData = {
+        name: 'Test Write',
+        status: 'Alive' as const,
+        species: 'Human',
+        gender: 'Male' as const,
+        image: 'test.jpg',
+      };
+
+      jest.spyOn(service, 'load').mockResolvedValue();
+
+      await service.addLocalCharacter(newCharacterData);
+
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        'rm-local-characters',
+        expect.any(String)
+      );
+
+      const savedData = JSON.parse(localStorageMock['rm-local-characters']);
+      expect(savedData).toHaveLength(1);
+      expect(savedData[0].name).toBe('Test Write');
+    });
+
+    it('deve testar load sem parâmetros (valores padrão)', async () => {
+      const loadPromise = service.load(); 
+
+      const req = httpMock.expectOne(
+        'https://rickandmortyapi.com/api/character?page=1'
+      );
       req.flush(mockApiResponse);
 
-      // Deve falhar mesmo com chamada da API bem-sucedida devido ao erro de JSON.parse
-      await expect(loadPromise).rejects.toThrow();
+      await loadPromise;
+
+      expect(service.page()).toBe(1);
+      expect(service.query()).toBe('');
+    });
+
+    it('deve testar editLocalCharacter quando getById falha', async () => {
+      localStorageMock['rm-local-characters'] = JSON.stringify([]);
+
+      const patch = { name: 'Rick Editado' };
+      jest.spyOn(service, 'load').mockResolvedValue();
+      jest.spyOn(service, 'getById').mockRejectedValue(new Error('API Error'));
+
+      await expect(service.editLocalCharacter(1, patch)).rejects.toThrow('API Error');
+    });
+
+    it('deve preservar state atual de page e query durante operações', async () => {
+      service.page.set(3);
+      service.query.set('test');
+
+      jest.spyOn(service, 'load').mockResolvedValue();
+
+      await service.deleteLocal(-1);
+
+      expect(service.load).toHaveBeenCalledWith(3, 'test');
+    });
+
+    it('deve testar scenarios de API responses com diferentes estruturas', async () => {
+      const apiResponseWithoutInfo = {
+        results: [mockCharacter],
+        info: {
+          count: undefined, 
+          next: null,
+          prev: null,
+        }
+      };
+
+      const loadPromise = service.load(1, '');
+
+      const req = httpMock.expectOne(
+        'https://rickandmortyapi.com/api/character?page=1'
+      );
+      req.flush(apiResponseWithoutInfo);
+
+      await loadPromise;
+
+      expect(service.characters()).toEqual([mockCharacter]);
+      expect(service.total()).toBe(0); 
+    });
+  });
+
+  describe('Testes de Edge Cases e Integrações', () => {
+    it('deve manter consistência dos signals durante múltiplas operações', async () => {
+      expect(service.loading()).toBe(false);
+      
+      const loadPromise = service.load(2, 'morty');
+      expect(service.loading()).toBe(true);
+      expect(service.page()).toBe(2);
+      expect(service.query()).toBe('morty');
+
+      const req = httpMock.expectOne(
+        'https://rickandmortyapi.com/api/character?page=2&name=morty'
+      );
+      req.flush(mockApiResponse);
+
+      await loadPromise;
+      
+      expect(service.loading()).toBe(false);
+      expect(service.characters()).toEqual([mockCharacter]);
+    });
+
+    it('deve testar addLocalCharacter com reload do estado atual', async () => {
+      service.page.set(5);
+      service.query.set('search-term');
+
+      const newCharacterData = {
+        name: 'Test Reload',
+        status: 'Alive' as const,
+        species: 'Human',
+        gender: 'Male' as const,
+        image: 'test.jpg',
+      };
+
+      jest.spyOn(service, 'load').mockResolvedValue();
+
+      await service.addLocalCharacter(newCharacterData);
+
+      expect(service.load).toHaveBeenCalledWith(5, 'search-term');
     });
   });
 });
