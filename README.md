@@ -33,7 +33,7 @@ cd rick-and-morty-crud
 
 2. **Instale as dependências:**
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
 ## ▶️ Execução
