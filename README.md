@@ -1,59 +1,142 @@
-# RickAndMortyCrud
+# Rick & Morty CRUD Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.17.
+Aplicação Angular para gerenciamento de personagens de Rick & Morty, permitindo visualizar, criar, editar e deletar personagens. O projeto utiliza a API pública do Rick & Morty e localStorage para persistência local.
 
-## Development server
+## 🚀 Tecnologias Utilizadas
 
-To start a local development server, run:
+- **Angular 19** - Framework principal
+- **Angular Material** - Componentes de UI
+- **TypeScript** - Linguagem de desenvolvimento
+- **Jest** - Framework de testes
+- **SCSS** - Pré-processador CSS
+- **Rick & Morty API** - Fonte de dados dos personagens
+
+## 📋 Pré-requisitos
+
+Antes de executar o projeto, certifique-se de ter instalado em sua máquina:
+
+- **Node.js** (versão 18 ou superior)
+- **npm** (normalmente vem com o Node.js)
+- **Angular CLI** (versão 19 ou superior)
+
+```bash
+npm install -g @angular/cli
+```
+
+## 🔧 Instalação
+
+1. **Clone o repositório:**
+```bash
+git clone https://github.com/natannascimento/rick-and-morty-crud.git
+cd rick-and-morty-crud
+```
+
+2. **Instale as dependências:**
+```bash
+npm install
+```
+
+## ▶️ Execução
+
+### Servidor de Desenvolvimento
+
+Para iniciar o servidor de desenvolvimento:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+ou
 
 ```bash
-ng generate component component-name
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Abra seu navegador e acesse `http://localhost:4200/`. A aplicação será recarregada automaticamente quando você modificar os arquivos fonte.
 
-```bash
-ng generate --help
-```
+## 🏗️ Build para Produção
 
-## Building
-
-To build the project run:
+Para criar uma versão otimizada para produção:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Os arquivos serão gerados na pasta `dist/`. Para build de produção otimizado:
 
 ```bash
-ng test
+ng build --configuration production
 ```
 
-## Running end-to-end tests
+## 🧪 Testes
 
-For end-to-end (e2e) testing, run:
+### Testes Unitários
+
+Execute os testes unitários com Jest:
 
 ```bash
-ng e2e
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Testes com Coverage
 
-## Additional Resources
+Para executar os testes com relatório de cobertura:
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+npm run test:coverage
+```
+
+O relatório será gerado na pasta `coverage/`.
+
+## 📱 Funcionalidades
+
+- ✅ **Listagem de Personagens** - Visualizar todos os personagens com paginação
+- ✅ **Busca por Nome** - Filtrar personagens pelo nome
+- ✅ **Detalhes do Personagem** - Ver informações completas
+- ✅ **Criar Personagem** - Adicionar novos personagens localmente
+- ✅ **Editar Personagem** - Modificar personagens existentes
+- ✅ **Deletar Personagem** - Remover personagens (apenas locais)
+- ✅ **Tema Rick & Morty** - Interface com cores temáticas
+- ✅ **Design Responsivo** - Funciona em desktop e mobile
+
+## 🎨 Estrutura do Projeto
+
+```
+src/
+├── app/
+│   ├── core/
+│   │   ├── models/          # Modelos de dados
+│   │   └── services/        # Serviços (API, localStorage)
+│   ├── features/
+│   │   └── character/       # Módulo de personagens
+│   │       ├── character-list/     # Listagem
+│   │       ├── character-detail/   # Detalhes
+│   │       └── character-form/     # Formulário
+│   └── shared/
+│       └── pipes/           # Pipes customizados
+```
+
+## 🌐 API Externa
+
+O projeto consome a [Rick & Morty API](https://rickandmortyapi.com/) para obter dados dos personagens originais da série.
+
+## 💾 Persistência Local
+
+Personagens criados localmente são armazenados no localStorage do navegador, permitindo que sejam editados e deletados.
+
+## 🚀 Deploy
+
+Para fazer deploy da aplicação, após o build, você pode hospedar os arquivos da pasta `dist/` em qualquer servidor web estático como:
+
+- GitHub Pages
+- Netlify
+- Vercel
+- Firebase Hosting
+
+## 📄 Licença
+
+Este projeto foi desenvolvido para fins educacionais e de demonstração.
+
+## 👨‍💻 Desenvolvedor
+
+Desenvolvido com ❤️ por [Natan Nascimento](https://github.com/natannascimento)
