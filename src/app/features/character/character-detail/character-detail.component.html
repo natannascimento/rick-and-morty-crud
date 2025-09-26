@@ -1,10 +1,12 @@
+<button
+  mat-icon-button
+  class="back-button"
+  (click)="goBack()"
+  title="Voltar para lista"
+>
+  <mat-icon>arrow_back</mat-icon>
+</button>
 <div class="detail-container">
-  <div class="header-with-back">
-    <button mat-icon-button class="back-button" (click)="goBack()" title="Voltar para lista">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-  </div>
-  
   <mat-card *ngIf="character() as char" class="character-detail">
     <mat-card-header>
       <div mat-card-avatar>
@@ -15,17 +17,19 @@
         />
       </div>
       <mat-card-title>{{ char.name }}</mat-card-title>
-      <mat-card-subtitle>{{ char.species }} | {{ char.status }}</mat-card-subtitle>
+      <mat-card-subtitle
+        >{{ char.species }} | {{ char.status }}</mat-card-subtitle
+      >
     </mat-card-header>
-  <img mat-card-image [src]="char.image" [alt]="char.name" />
-  <mat-card-content>
-    <div class="info-grid">
-      <div>
-  <p>Status: {{ char.status }}</p>
-  <p>Species: {{ char.species }}</p>
-  <p>Gender: {{ char.gender }}</p>
+    <img mat-card-image [src]="char.image" [alt]="char.name" />
+    <mat-card-content>
+      <div class="info-grid">
+        <div>
+          <p>Status: {{ char.status }}</p>
+          <p>Species: {{ char.species }}</p>
+          <p>Gender: {{ char.gender }}</p>
+        </div>
       </div>
-    </div>
-  </mat-card-content>
-</mat-card>
+    </mat-card-content>
+  </mat-card>
 </div>
