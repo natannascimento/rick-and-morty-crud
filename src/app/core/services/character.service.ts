@@ -18,14 +18,74 @@ export class CharactersService {
   query = signal<string>('');
   page = signal<number>(1);
 
-  private LS_KEY = 'rm-local-characters';
+  private readonly LS_KEY = 'rm-local-characters';
 
   private readLocal(): Character[] {
     const raw = localStorage.getItem(this.LS_KEY);
     return raw ? JSON.parse(raw) : [];
   }
+
+  private getLocalCharacters(): Character[] {
+    try {
+      return this.readLocal();
+    } catch (error) {
+      console.warn('Error reading local characters:', error);
+      return [];
+    }
+  }
+
   private writeLocal(list: Character[]) {
     localStorage.setItem(this.LS_KEY, JSON.stringify(list));
+  }
+
+  private saveLocalCharacters(characters: Character[]): void {
+    try {
+      this.writeLocal(characters);
+    } catch (error) {
+      console.error('Error saving local characters:', error);
+    }
+  }
+
+  private addToLocalStorage(character: Character): void {
+    const locals = this.readLocal();
+    locals.unshift(character);
+    this.writeLocal(locals);
+  }
+
+  private updateInLocalStorage(id: number, updates: Partial<Character>): void {
+    const locals = this.readLocal();
+    const index = locals.findIndex(char => char.id === id);
+    if (index >= 0) {
+      locals[index] = { ...locals[index], ...updates, _updatedAt: new Date().toISOString() };
+      this.writeLocal(locals);
+    }
+  }
+
+  private removeFromLocalStorage(id: number): void {
+    const locals = this.readLocal().filter(char => char.id !== id);
+    this.writeLocal(locals);
+  }
+
+  private mergeCharactersData(apiCharacters: Character[], localCharacters: Character[]): Character[] {
+    return [...localCharacters, ...apiCharacters.filter(apiChar => 
+      !localCharacters.some(localChar => localChar.id === apiChar.id)
+    )];
+  }
+
+  private calculateTotalCount(apiCount: number, localCount: number): number {
+    return apiCount + localCount;
+  }
+
+  private buildApiUrl(page: number, name: string): string {
+    const params = new URLSearchParams();
+    params.set('page', String(page));
+    if (name) params.set('name', name);
+    return `${this.baseUrl}?${params.toString()}`;
+  }
+
+  private updateCharacterState(characters: Character[], total: number): void {
+    this.characters.set(characters);
+    this.total.set(total);
   }
 
   async load(page = 1, name = '') {
@@ -33,26 +93,39 @@ export class CharactersService {
     this.page.set(page);
     this.query.set(name);
 
-    const params = new URLSearchParams();
-    params.set('page', String(page));
-    if (name) params.set('name', name);
-
     try {
-      const resp = await this.http.get<ApiResponse>(`${this.baseUrl}?${params.toString()}`).toPromise();
-      const apiItems = resp?.results ?? [];
-      const locals = this.readLocal();
+      const apiUrl = this.buildApiUrl(page, name);
+      const response = await this.http.get<ApiResponse>(apiUrl).toPromise();
+      const apiCharacters = response?.results ?? [];
+      const localCharacters = this.readLocal();
 
-      const merged = [...locals, ...apiItems.filter(a => !locals.some(l => l.id === a.id))];
+      const mergedCharacters = this.mergeCharactersData(apiCharacters, localCharacters);
+      const totalCount = this.calculateTotalCount(response?.info.count ?? 0, localCharacters.length);
 
-      this.characters.set(merged);
-      this.total.set((resp?.info.count ?? 0) + locals.length);
+      this.updateCharacterState(mergedCharacters, totalCount);
     } catch {
-      const locals = this.readLocal();
-      this.characters.set(locals);
-      this.total.set(locals.length);
+      const localCharacters = this.readLocal();
+      this.updateCharacterState(localCharacters, localCharacters.length);
     } finally {
       this.loading.set(false);
     }
+  }
+
+  private generateLocalId(existingCharacters: Character[]): number {
+    return -(existingCharacters.length + 1);
+  }
+
+  private createLocalCharacter(data: Omit<Character, 'id'>, id: number): Character {
+    return {
+      ...data,
+      id,
+      _local: true,
+      _updatedAt: new Date().toISOString()
+    };
+  }
+
+  private async refreshCurrentView(): Promise<void> {
+    await this.load(this.page(), this.query());
   }
 
   getById(id: number) {
@@ -63,34 +136,37 @@ export class CharactersService {
   }
 
   async addLocalCharacter(data: Omit<Character, 'id'>) {
-    const locals = this.readLocal();
-    const newId = -(locals.length + 1);
-    const novo: Character = { ...data, id: newId, _local: true, _updatedAt: new Date().toISOString() };
-    locals.unshift(novo);
-    this.writeLocal(locals);
-    await this.load(this.page(), this.query());
-    return novo;
+    const existingCharacters = this.readLocal();
+    const newId = this.generateLocalId(existingCharacters);
+    const newCharacter = this.createLocalCharacter(data, newId);
+    
+    this.addToLocalStorage(newCharacter);
+    await this.refreshCurrentView();
+    return newCharacter;
   }
 
-  async editLocalCharacter(id: number, patch: Partial<Character>) {
-    const locals = this.readLocal();
-    const idx = locals.findIndex(p => p.id === id);
-    if (idx >= 0) {
-      locals[idx] = { ...locals[idx], ...patch, _updatedAt: new Date().toISOString() };
-      this.writeLocal(locals);
+  async editLocalCharacter(id: number, updates: Partial<Character>) {
+    const localCharacters = this.readLocal();
+    const existingCharacter = localCharacters.find(char => char.id === id);
+    
+    if (existingCharacter) {
+      this.updateInLocalStorage(id, updates);
     } else {
-      const original = await this.getById(id);
-      if (original) {
-        locals.unshift({ ...original, ...patch, _local: true, _updatedAt: new Date().toISOString(), id });
-        this.writeLocal(locals);
+      const originalCharacter = await this.getById(id);
+      if (originalCharacter) {
+        const updatedCharacter = this.createLocalCharacter(
+          { ...originalCharacter, ...updates }, 
+          id
+        );
+        this.addToLocalStorage(updatedCharacter);
       }
     }
-    await this.load(this.page(), this.query());
+    
+    await this.refreshCurrentView();
   }
 
   async deleteLocal(id: number) {
-    const locals = this.readLocal().filter(p => p.id !== id);
-    this.writeLocal(locals);
-    await this.load(this.page(), this.query());
+    this.removeFromLocalStorage(id);
+    await this.refreshCurrentView();
   }
 }
